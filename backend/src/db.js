@@ -1,8 +1,11 @@
-import Database from "better-sqlite3";
+import { createRequire } from "node:module";
+
+// Modul SQLite bawaan Node.js (>= 22.13): tidak perlu kompilasi library native.
+const { DatabaseSync } = createRequire(import.meta.url)("node:sqlite");
 
 export function openDb(path = ":memory:") {
-  const db = new Database(path);
-  db.pragma("foreign_keys = ON");
+  const db = new DatabaseSync(path);
+  db.exec("PRAGMA foreign_keys = ON");
   db.exec(`
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

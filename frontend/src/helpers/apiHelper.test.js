@@ -25,7 +25,11 @@ describe("apiHelper", () => {
     expect(await api("/x")).toBeNull();
     vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce({ ok: false, status: 400, json: async () => ({ message: "Salah" }) }));
     await expect(api("/x")).rejects.toThrow("Salah");
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValueOnce(new TypeError("Failed to fetch")));
+    await expect(api("/x")).rejects.toThrow("Tidak dapat terhubung ke server");
     vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce({ ok: false, status: 500, json: async () => { throw new Error(); } }));
+    await expect(api("/x")).rejects.toThrow("Tidak dapat terhubung ke server");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce({ ok: false, status: 400, json: async () => ({}) }));
     await expect(api("/x")).rejects.toThrow("Terjadi kesalahan pada server");
   });
 });

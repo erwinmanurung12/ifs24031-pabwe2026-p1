@@ -1,6 +1,6 @@
 # DelLiga Backend
 
-API Express.js + SQLite untuk sistem manajemen turnamen olahraga kampus (Proyek 1 PABWE).
+API Express.js + SQLite (modul bawaan Node.js `node:sqlite`, butuh Node >= 22.13) untuk sistem manajemen turnamen olahraga kampus (Proyek 1 PABWE).
 
 ## Menjalankan
 ```

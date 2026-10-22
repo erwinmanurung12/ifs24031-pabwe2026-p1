@@ -40,7 +40,8 @@ export function seedDemo(db) {
     "INSERT INTO matches (tournament_id, home_team_id, away_team_id, scheduled_at, home_score, away_score, status) VALUES (?, ?, ?, ?, ?, ?, ?)"
   );
 
-  db.transaction(() => {
+  db.exec("BEGIN");
+  try {
     DATA.forEach((t, ti) => {
       const tid = insT.run(t.name, t.sport, t.status, iso(t.start).slice(0, 10)).lastInsertRowid;
       const ids = t.teams.map((name, i) => {
@@ -56,6 +57,10 @@ export function seedDemo(db) {
           score ? score[0] : null, score ? score[1] : null, score ? "finished" : "scheduled");
       });
     });
-  })();
+    db.exec("COMMIT");
+  } catch (e) {
+    db.exec("ROLLBACK");
+    throw e;
+  }
   return true;
 }
