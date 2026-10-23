@@ -100,7 +100,7 @@ export default function HomePage() {
 
       <section>
         <h2 className="font-display text-3xl font-bold text-pitch mb-3">Turnamen</h2>
-        {!loading && !tournaments.length ? <p>Belum ada turnamen. Panitia dapat membuatnya setelah masuk.</p> : null}
+        {!loading && !tournaments.length ? <p>Belum ada turnamen. Panitia dapat membuatnya dari halaman ini.</p> : null}
         <ul className="divide-y divide-line border-y border-line">
           {tournaments.map((t) => (
             <li key={t.id}>

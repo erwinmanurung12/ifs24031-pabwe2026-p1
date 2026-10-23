@@ -25,6 +25,10 @@ export const updateTournament = thunk("tournaments/update", ({ id, ...body }) =>
   api(`/tournaments/${id}`, { method: "PUT", body }));
 export const deleteMatch = thunk("tournaments/deleteMatch", (matchId) =>
   api(`/matches/${matchId}`, { method: "DELETE" }));
+export const fetchComments = thunk("tournaments/comments", (id) => api(`/tournaments/${id}/comments`));
+export const postComment = thunk("tournaments/postComment", ({ id, body }) =>
+  api(`/tournaments/${id}/comments`, { method: "POST", body: { body } }));
+export const deleteComment = thunk("tournaments/deleteComment", (id) => api(`/comments/${id}`, { method: "DELETE" }));
 export const addMatch = thunk("tournaments/addMatch", ({ id, ...body }) =>
   api(`/tournaments/${id}/matches`, { method: "POST", body }));
 export const saveScore = thunk("tournaments/saveScore", ({ matchId, ...body }) =>
@@ -32,7 +36,7 @@ export const saveScore = thunk("tournaments/saveScore", ({ matchId, ...body }) =
 
 const slice = createSlice({
   name: "tournaments",
-  initialState: { overview: { tournaments: [], recent: [], upcoming: [] }, current: null, teams: [], matches: [], standings: [], loading: false },
+  initialState: { overview: { tournaments: [], recent: [], upcoming: [] }, current: null, comments: [], teams: [], matches: [], standings: [], loading: false },
   reducers: {},
   extraReducers: (b) => {
     b.addCase(fetchOverview.pending, (s) => { s.loading = true; })
@@ -46,6 +50,7 @@ const slice = createSlice({
         s.matches = payload.matches;
         s.standings = payload.standings;
       })
+      .addCase(fetchComments.fulfilled, (s, a) => { s.comments = a.payload; })
       .addCase(fetchDetail.rejected, (s) => { s.loading = false; s.current = null; });
   },
 });

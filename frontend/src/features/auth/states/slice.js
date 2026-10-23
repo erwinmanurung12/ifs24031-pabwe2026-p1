@@ -12,6 +12,8 @@ export const login = thunk("auth/login", async (creds) => {
   return data.user;
 });
 
+export const register = thunk("auth/register", (body) => api("/auth/register", { method: "POST", body }));
+
 const slice = createSlice({
   name: "auth",
   initialState: { user: getUser(), loading: false },
@@ -21,7 +23,10 @@ const slice = createSlice({
   extraReducers: (b) => {
     b.addCase(login.pending, (s) => { s.loading = true; })
       .addCase(login.fulfilled, (s, a) => { s.loading = false; s.user = a.payload; })
-      .addCase(login.rejected, (s) => { s.loading = false; });
+      .addCase(login.rejected, (s) => { s.loading = false; })
+      .addCase(register.pending, (s) => { s.loading = true; })
+      .addCase(register.fulfilled, (s) => { s.loading = false; })
+      .addCase(register.rejected, (s) => { s.loading = false; });
   },
 });
 

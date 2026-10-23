@@ -9,7 +9,7 @@ import { computeStandings } from "./standings.js";
 const isInt = (v) => Number.isInteger(v) && v >= 0;
 const str = (v) => typeof v === "string" && v.trim().length > 0;
 
-export function createApp(db, { jwtSecret = "dev-secret", staticDir = null } = {}) {
+export function createApp(db, { jwtSecret = "dev-secret", staticDir = null, panitiaCode = null } = {}) {
   const app = express();
   app.use(cors());
   app.use(express.json());
@@ -37,7 +37,21 @@ export function createApp(db, { jwtSecret = "dev-secret", staticDir = null } = {
   };
 
   // ---------- Auth ----------
-  // Akun hanya dibuat oleh panitia (admin). Mahasiswa melihat data tanpa akun.
+  // Pendaftaran: mahasiswa (viewer) bebas; panitia (admin) wajib kode panitia.
+  app.post("/api/auth/register", (req, res) => {
+    const { name, email, password, role = "viewer", panitia_code } = req.body;
+    if (!str(name) || !str(email) || !str(password) || password.length < 8)
+      return fail(res, 400, "Nama, email, dan password (min 8 karakter) wajib diisi");
+    if (!["viewer", "admin"].includes(role)) return fail(res, 400, "Peran tidak valid");
+    if (role === "admin" && (!panitiaCode || panitia_code !== panitiaCode)) return fail(res, 403, "Kode panitia salah");
+    const mail = email.trim().toLowerCase();
+    if (db.prepare("SELECT 1 FROM users WHERE email = ?").get(mail)) return fail(res, 409, "Email sudah terdaftar");
+    const info = db.prepare("INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)")
+      .run(name.trim(), mail, bcrypt.hashSync(password, 10), role);
+    res.status(201).json({ id: info.lastInsertRowid, name: name.trim(), email: mail, role });
+  });
+
+  // Kelola akun oleh panitia.
   app.get("/api/users", admin, (_req, res) =>
     res.json(db.prepare("SELECT id, name, email, role FROM users ORDER BY id").all()));
 
@@ -77,10 +91,10 @@ export function createApp(db, { jwtSecret = "dev-secret", staticDir = null } = {
   });
 
   // ---------- Tournaments ----------
-  app.get("/api/tournaments", (_req, res) =>
+  app.get("/api/tournaments", auth(), (_req, res) =>
     res.json(db.prepare("SELECT * FROM tournaments ORDER BY id DESC").all()));
 
-  app.get("/api/tournaments/:id", (req, res) => {
+  app.get("/api/tournaments/:id", auth(), (req, res) => {
     const t = tournamentOr404(req, res);
     if (t) res.json(t);
   });
@@ -114,7 +128,7 @@ export function createApp(db, { jwtSecret = "dev-secret", staticDir = null } = {
   });
 
   // ---------- Teams & Players ----------
-  app.get("/api/tournaments/:id/teams", (req, res) => {
+  app.get("/api/tournaments/:id/teams", auth(), (req, res) => {
     if (!tournamentOr404(req, res)) return;
     const teams = db.prepare("SELECT * FROM teams WHERE tournament_id = ? ORDER BY name").all(req.params.id);
     const players = db.prepare(
@@ -140,7 +154,7 @@ export function createApp(db, { jwtSecret = "dev-secret", staticDir = null } = {
     info.changes ? res.status(204).end() : fail(res, 404, "Tim tidak ditemukan");
   });
 
-  app.get("/api/teams/:id/players", (req, res) =>
+  app.get("/api/teams/:id/players", auth(), (req, res) =>
     res.json(db.prepare("SELECT * FROM players WHERE team_id = ? ORDER BY number").all(req.params.id)));
 
   app.post("/api/teams/:id/players", admin, (req, res) => {
@@ -160,7 +174,7 @@ export function createApp(db, { jwtSecret = "dev-secret", staticDir = null } = {
     JOIN teams h ON h.id = m.home_team_id
     JOIN teams a ON a.id = m.away_team_id`;
 
-  app.get("/api/tournaments/:id/matches", (req, res) => {
+  app.get("/api/tournaments/:id/matches", auth(), (req, res) => {
     if (!tournamentOr404(req, res)) return;
     res.json(db.prepare(`${matchSelect} WHERE m.tournament_id = ? ORDER BY m.scheduled_at, m.id`).all(req.params.id));
   });
@@ -196,8 +210,35 @@ export function createApp(db, { jwtSecret = "dev-secret", staticDir = null } = {
     info.changes ? res.status(204).end() : fail(res, 404, "Pertandingan tidak ditemukan");
   });
 
+  // ---------- Komentar ----------
+  const commentSel = `SELECT c.id, c.tournament_id, c.user_id, c.body, c.created_at, u.name AS author, u.role AS author_role
+    FROM comments c JOIN users u ON u.id = c.user_id`;
+
+  app.get("/api/tournaments/:id/comments", auth(), (req, res) => {
+    if (!tournamentOr404(req, res)) return;
+    res.json(db.prepare(`${commentSel} WHERE c.tournament_id = ? ORDER BY c.id DESC`).all(req.params.id));
+  });
+
+  app.post("/api/tournaments/:id/comments", auth(), (req, res) => {
+    const t = tournamentOr404(req, res);
+    if (!t) return;
+    const body = typeof req.body.body === "string" ? req.body.body.trim() : "";
+    if (!body || body.length > 500) return fail(res, 400, "Komentar wajib diisi (maksimal 500 karakter)");
+    const info = db.prepare("INSERT INTO comments (tournament_id, user_id, body, created_at) VALUES (?, ?, ?, ?)")
+      .run(t.id, req.user.id, body, new Date().toISOString());
+    res.status(201).json(db.prepare(`${commentSel} WHERE c.id = ?`).get(info.lastInsertRowid));
+  });
+
+  app.delete("/api/comments/:id", auth(), (req, res) => {
+    const c = db.prepare("SELECT * FROM comments WHERE id = ?").get(req.params.id);
+    if (!c) return fail(res, 404, "Komentar tidak ditemukan");
+    if (req.user.role !== "admin" && c.user_id !== req.user.id) return fail(res, 403, "Akses ditolak");
+    db.prepare("DELETE FROM comments WHERE id = ?").run(c.id);
+    res.status(204).end();
+  });
+
   // ---------- Ringkasan untuk beranda ----------
-  app.get("/api/overview", (_req, res) => {
+  app.get("/api/overview", auth(), (_req, res) => {
     const tournaments = db.prepare(
       "SELECT * FROM tournaments ORDER BY CASE status WHEN 'ongoing' THEN 0 WHEN 'upcoming' THEN 1 ELSE 2 END, id DESC"
     ).all().map((t) => {
@@ -225,7 +266,7 @@ export function createApp(db, { jwtSecret = "dev-secret", staticDir = null } = {
   });
 
   // ---------- Standings ----------
-  app.get("/api/tournaments/:id/standings", (req, res) => {
+  app.get("/api/tournaments/:id/standings", auth(), (req, res) => {
     const t = tournamentOr404(req, res);
     if (!t) return;
     const teams = db.prepare("SELECT * FROM teams WHERE tournament_id = ?").all(t.id);

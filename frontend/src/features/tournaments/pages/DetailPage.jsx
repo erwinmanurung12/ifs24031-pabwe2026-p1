@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import useInput from "../../../hooks/useInput";
 import { STATUS_LABEL, showConfirm, showError, showSuccess } from "../../../helpers/toolsHelper";
+import CommentsTab from "../components/CommentsTab";
 import MatchList from "../components/MatchList";
 import StandingsTable from "../components/StandingsTable";
 import { addMatch, addPlayer, addTeam, deleteMatch, fetchDetail, saveScore, updateTournament } from "../states/slice";
@@ -39,7 +40,7 @@ function TeamBlock({ team, isAdmin, onAdd }) {
   );
 }
 
-const TABS = [["standings", "Klasemen"], ["matches", "Jadwal dan hasil"], ["teams", "Tim"]];
+const TABS = [["standings", "Klasemen"], ["matches", "Jadwal dan hasil"], ["teams", "Tim"], ["comments", "Komentar"]];
 
 export default function DetailPage() {
   const { id } = useParams();
@@ -144,6 +145,8 @@ export default function DetailPage() {
             }} />
         </>
       )}
+
+      {tab === "comments" && <CommentsTab tournamentId={id} />}
 
       {tab === "teams" && (
         <>

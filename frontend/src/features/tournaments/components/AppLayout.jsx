@@ -14,12 +14,15 @@ export default function AppLayout() {
           <nav className="flex items-center gap-4 text-sm">
             {user ? (
               <>
-                <Link to="/panitia" className="underline">Akun panitia</Link>
-                <span>{user.name}</span>
+                {user.role === "admin" && <Link to="/panitia" className="underline">Akun panitia</Link>}
+                <span>{user.name} <span className="text-white/60">({user.role === "admin" ? "panitia" : "mahasiswa"})</span></span>
                 <button onClick={() => { dispatch(logout()); navigate("/auth/login"); }} className="underline">Keluar</button>
               </>
             ) : (
-              <Link to="/auth/login" className="bg-bib text-ink px-3 py-1 font-semibold">Masuk panitia</Link>
+              <>
+                <Link to="/auth/login" className="underline">Masuk</Link>
+                <Link to="/auth/register" className="bg-bib text-ink px-3 py-1 font-semibold">Daftar</Link>
+              </>
             )}
           </nav>
         </div>

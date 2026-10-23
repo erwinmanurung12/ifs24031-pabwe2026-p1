@@ -21,6 +21,6 @@ if (!db.prepare("SELECT 1 FROM users WHERE email = ?").get(ADMIN_EMAIL)) {
 if (process.env.SEED_DEMO !== "false") seedDemo(db);
 
 const staticDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../frontend/dist");
-const app = createApp(db, { jwtSecret: process.env.JWT_SECRET || "dev-secret", staticDir });
+const app = createApp(db, { jwtSecret: process.env.JWT_SECRET || "dev-secret", panitiaCode: process.env.PANITIA_CODE || null, staticDir });
 const port = Number(process.env.PORT) || 8000;
 app.listen(port, () => console.log(`DelLiga API berjalan di http://localhost:${port}`));

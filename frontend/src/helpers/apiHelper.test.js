@@ -20,6 +20,15 @@ describe("apiHelper", () => {
     expect(await api("/x", { method: "POST", body: { b: 2 } })).toEqual({ a: 1 });
     expect(f.mock.calls[0][1].headers.Authorization).toBe("Bearer tok");
   });
+  it("sesi berakhir: 401 menghapus sesi dan memicu event", async () => {
+    setSession("tok", { name: "A" });
+    const onExpired = vi.fn(); window.addEventListener("auth:expired", onExpired);
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce({ ok: false, status: 401, json: async () => ({ message: "Token tidak valid" }) }));
+    await expect(api("/x")).rejects.toThrow("Sesi berakhir");
+    expect(getToken()).toBeNull();
+    expect(onExpired).toHaveBeenCalled();
+    window.removeEventListener("auth:expired", onExpired);
+  });
   it("menangani 204 dan error", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce({ ok: true, status: 204 }));
     expect(await api("/x")).toBeNull();

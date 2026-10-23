@@ -27,6 +27,11 @@ export async function api(path, { method = "GET", body } = {}) {
   }
   if (res.status === 204) return null;
   const data = await res.json().catch(() => ({}));
+  if (res.status === 401 && token) {
+    clearSession();
+    window.dispatchEvent(new Event("auth:expired"));
+    throw new Error("Sesi berakhir. Silakan masuk kembali.");
+  }
   if (!res.ok) {
     // Proxy dev mengembalikan 5xx tanpa pesan bila backend mati
     if (!data.message && res.status >= 500) throw new Error(NETWORK_MSG);

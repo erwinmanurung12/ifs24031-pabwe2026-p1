@@ -57,6 +57,13 @@ export function seedDemo(db) {
           score ? score[0] : null, score ? score[1] : null, score ? "finished" : "scheduled");
       });
     });
+    const u = db.prepare("SELECT id FROM users ORDER BY id LIMIT 1").get();
+    const firstT = db.prepare("SELECT id FROM tournaments ORDER BY id LIMIT 1").get();
+    if (u && firstT) {
+      const insC = db.prepare("INSERT INTO comments (tournament_id, user_id, body, created_at) VALUES (?, ?, ?, ?)");
+      insC.run(firstT.id, u.id, "Selamat bertanding! Jadwal laga berikutnya akan diumumkan di halaman ini.", new Date(Date.now() - 3600e3).toISOString());
+      insC.run(firstT.id, u.id, "Mohon tiba 15 menit sebelum kick-off.", new Date().toISOString());
+    }
     db.exec("COMMIT");
   } catch (e) {
     db.exec("ROLLBACK");

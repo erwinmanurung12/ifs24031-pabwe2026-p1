@@ -23,7 +23,12 @@ Buka http://localhost:8000. Express melayani API dan hasil build React sekaligus
 ## Deploy (Render, satu layanan)
 - Build Command: `npm run install:all && npm run build`
 - Start Command: `npm start`
-- Environment: `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `NODE_VERSION=22`
+- Environment: `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `PANITIA_CODE`, `NODE_VERSION=22`
+
+## Peran pengguna
+- **Mahasiswa/peserta** (viewer): daftar sendiri, lalu dapat melihat jadwal, skor, klasemen, dan berkomentar.
+- **Panitia BEM Olahraga** (admin): mengelola turnamen, tim, pemain, jadwal, skor, dan akun. Daftar sebagai panitia butuh `PANITIA_CODE` (diatur di environment backend).
+- Tanpa akun, pengunjung hanya melihat halaman sambutan.
 
 ## Akun panitia bawaan
 `admin@delliga.test` / `admin12345` (ubah lewat environment). Data contoh dibuat otomatis saat database kosong.
