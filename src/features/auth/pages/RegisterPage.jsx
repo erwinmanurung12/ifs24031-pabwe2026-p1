@@ -30,25 +30,25 @@ export default function RegisterPage() {
   return (
     <form onSubmit={submit} className="grid gap-4">
       <h1 className="font-display text-2xl font-bold">Buat akun</h1>
-      <label className="grid gap-1 text-sm font-medium">Daftar sebagai
+      <label className="grid gap-1 text-sm font-medium">Daftar sebagai{" "}
         <select value={role} onChange={onRole} className="border border-line px-3 py-2 font-normal">
           <option value="viewer">Mahasiswa atau peserta (melihat dan berkomentar)</option>
           <option value="admin">Panitia BEM Olahraga (mengelola data)</option>
         </select>
       </label>
       {role === "admin" && (
-        <label className="grid gap-1 text-sm font-medium">Kode panitia
+        <label className="grid gap-1 text-sm font-medium">Kode panitia{" "}
           <input required value={code} onChange={onCode} className="border border-line px-3 py-2 font-normal" />
           <span className="text-xs font-normal text-ink/70">Kode diberikan oleh ketua panitia.</span>
         </label>
       )}
-      <label className="grid gap-1 text-sm font-medium">Nama
+      <label className="grid gap-1 text-sm font-medium">Nama{" "}
         <input required value={name} onChange={onName} className="border border-line px-3 py-2 font-normal" />
       </label>
-      <label className="grid gap-1 text-sm font-medium">Email
+      <label className="grid gap-1 text-sm font-medium">Email{" "}
         <input type="email" required value={email} onChange={onEmail} className="border border-line px-3 py-2 font-normal" />
       </label>
-      <label className="grid gap-1 text-sm font-medium">Password (minimal 8 karakter)
+      <label className="grid gap-1 text-sm font-medium">Password (minimal 8 karakter){" "}
         <input type="password" required minLength={8} value={password} onChange={onPassword} className="border border-line px-3 py-2 font-normal" />
       </label>
       <button disabled={loading} className="bg-pitch text-white py-2 font-semibold disabled:opacity-60">Daftar</button>

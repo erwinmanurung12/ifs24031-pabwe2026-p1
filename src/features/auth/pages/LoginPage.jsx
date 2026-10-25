@@ -25,10 +25,10 @@ export default function LoginPage() {
     <form onSubmit={submit} className="grid gap-4">
       <h1 className="font-display text-2xl font-bold">Masuk</h1>
       <p className="text-sm text-ink/70">Untuk panitia BEM Olahraga dan mahasiswa. Setelah masuk, jadwal, skor, dan klasemen dapat dilihat.</p>
-      <label className="grid gap-1 text-sm font-medium">Email
+      <label className="grid gap-1 text-sm font-medium">Email{" "}
         <input id="username" name="username" type="email" required value={email} onChange={onEmail} className="border border-line px-3 py-2 font-normal" />
       </label>
-      <label className="grid gap-1 text-sm font-medium">Password
+      <label className="grid gap-1 text-sm font-medium">Password{" "}
         <input id="password" name="password" type="password" required value={password} onChange={onPassword} className="border border-line px-3 py-2 font-normal" />
       </label>
       <button id="btn-submit" type="submit" disabled={loading} className="bg-pitch text-white py-2 font-semibold disabled:opacity-60">Masuk</button>

@@ -40,13 +40,13 @@ export default function UsersPage() {
           run(createUser({ name, email, password }), "Akun panitia dibuat", () => { resetName(); resetEmail(); resetPassword(); });
         }}
         className="grid gap-3 sm:grid-cols-[1fr_1fr_1fr_auto] items-end bg-white border border-line p-4 mb-8">
-        <label className="grid gap-1 text-sm font-medium">Nama
+        <label className="grid gap-1 text-sm font-medium">Nama{" "}
           <input required value={name} onChange={onName} className="border border-line px-3 py-2 font-normal" />
         </label>
-        <label className="grid gap-1 text-sm font-medium">Email
+        <label className="grid gap-1 text-sm font-medium">Email{" "}
           <input type="email" required value={email} onChange={onEmail} className="border border-line px-3 py-2 font-normal" />
         </label>
-        <label className="grid gap-1 text-sm font-medium">Password (min 8 karakter)
+        <label className="grid gap-1 text-sm font-medium">Password (min 8 karakter){" "}
           <input type="password" required minLength={8} value={password} onChange={onPassword} className="border border-line px-3 py-2 font-normal" />
         </label>
         <button className="bg-pitch text-white px-4 py-2 font-semibold">Buat akun</button>

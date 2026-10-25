@@ -25,15 +25,15 @@ function CreateForm() {
 
   return (
     <form onSubmit={submit} className="grid gap-3 sm:grid-cols-[1fr_10rem_10rem_auto] items-end border border-line bg-white p-4 mb-10">
-      <label className="grid gap-1 text-sm font-medium">Nama turnamen
+      <label className="grid gap-1 text-sm font-medium">Nama turnamen{" "}
         <input required value={name} onChange={onName} className="border border-line px-3 py-2 font-normal" />
       </label>
-      <label className="grid gap-1 text-sm font-medium">Cabang
+      <label className="grid gap-1 text-sm font-medium">Cabang{" "}
         <select value={sport} onChange={onSport} className="border border-line px-3 py-2 font-normal">
           {SPORTS.map((s) => <option key={s}>{s}</option>)}
         </select>
       </label>
-      <label className="grid gap-1 text-sm font-medium">Tanggal mulai
+      <label className="grid gap-1 text-sm font-medium">Tanggal mulai{" "}
         <input type="date" value={startDate} onChange={onStart} className="border border-line px-3 py-2 font-normal" />
       </label>
       <button className="bg-pitch text-white px-4 py-2 font-semibold">Buat turnamen</button>

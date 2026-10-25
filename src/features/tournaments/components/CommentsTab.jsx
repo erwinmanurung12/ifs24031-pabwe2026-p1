@@ -28,7 +28,7 @@ export default function CommentsTab({ tournamentId }) {
       <form
         onSubmit={(e) => { e.preventDefault(); run(postComment({ id: tournamentId, body: text }), "Komentar terkirim", resetText); }}
         className="grid gap-2 bg-white border border-line p-4 mb-6">
-        <label className="grid gap-1 text-sm font-medium">Tulis komentar
+        <label className="grid gap-1 text-sm font-medium">Tulis komentar{" "}
           <textarea required maxLength={500} rows={3} value={text} onChange={onText} className="border border-line px-3 py-2 font-normal" />
         </label>
         <button className="justify-self-start bg-pitch text-white px-4 py-2 font-semibold">Kirim komentar</button>

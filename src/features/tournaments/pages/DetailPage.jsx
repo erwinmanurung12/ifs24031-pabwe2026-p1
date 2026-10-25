@@ -80,7 +80,7 @@ export default function DetailPage() {
       {isAdmin && (
         <div className="bg-bib/25 border-l-4 border-bib p-4 mb-4 text-sm grid gap-2 sm:flex sm:items-center sm:justify-between">
           <p>Mode panitia: jadwalkan pertandingan dan isi skor di tab Jadwal dan hasil, tambah tim dan pemain di tab Tim.</p>
-          <label className="flex items-center gap-2 font-medium">Status turnamen
+          <label className="flex items-center gap-2 font-medium">Status turnamen{" "}
             <select value={current.status} onChange={(e) => run(updateTournament({ id, status: e.target.value }), "Status diperbarui")}
               className="border border-line bg-white px-2 py-1 font-normal">
               {Object.entries(STATUS_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
@@ -119,19 +119,19 @@ export default function DetailPage() {
                   "Pertandingan dijadwalkan", () => { resetHome(); resetAway(); resetWhen(); });
               }}
               className="grid gap-3 sm:grid-cols-[1fr_1fr_12rem_auto] items-end bg-white border border-line p-4 mb-6">
-              <label className="grid gap-1 text-sm font-medium">Tim tuan rumah
+              <label className="grid gap-1 text-sm font-medium">Tim tuan rumah{" "}
                 <select required value={home} onChange={onHome} className="border border-line px-3 py-2 font-normal">
                   <option value="">Pilih tim</option>
                   {teams.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
                 </select>
               </label>
-              <label className="grid gap-1 text-sm font-medium">Tim tamu
+              <label className="grid gap-1 text-sm font-medium">Tim tamu{" "}
                 <select required value={away} onChange={onAway} className="border border-line px-3 py-2 font-normal">
                   <option value="">Pilih tim</option>
                   {teams.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
                 </select>
               </label>
-              <label className="grid gap-1 text-sm font-medium">Waktu
+              <label className="grid gap-1 text-sm font-medium">Waktu{" "}
                 <input type="datetime-local" value={when} onChange={onWhen} className="border border-line px-3 py-2 font-normal" />
               </label>
               <button className="bg-pitch text-white px-4 py-2 font-semibold">Jadwalkan</button>
@@ -154,7 +154,7 @@ export default function DetailPage() {
             <form
               onSubmit={(e) => { e.preventDefault(); run(addTeam({ id, name: teamName }), "Tim ditambahkan", resetTeam); }}
               className="flex gap-3 items-end bg-white border border-line p-4 mb-6">
-              <label className="grid gap-1 text-sm font-medium flex-1">Nama tim
+              <label className="grid gap-1 text-sm font-medium flex-1">Nama tim{" "}
                 <input required value={teamName} onChange={onTeamName} className="border border-line px-3 py-2 font-normal" />
               </label>
               <button className="bg-pitch text-white px-4 py-2 font-semibold">Tambah tim</button>
