@@ -20,7 +20,6 @@ export default defineConfig({
         "src/main.jsx",
         "src/setupTests.js",
         "src/test-utils.jsx",
-        "src/backend/server.js",
         "**/*.test.*",
       ],
     },
