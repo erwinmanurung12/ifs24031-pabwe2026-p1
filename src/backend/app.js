@@ -1,5 +1,5 @@
 import express from "express";
-import cors from "cors";
+import crypto from "node:crypto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import fs from "node:fs";
@@ -9,9 +9,8 @@ import { computeStandings } from "./standings.js";
 const isInt = (v) => Number.isInteger(v) && v >= 0;
 const str = (v) => typeof v === "string" && v.trim().length > 0;
 
-export function createApp(db, { jwtSecret = "dev-secret", staticDir = null, panitiaCode = null } = {}) {
+export function createApp(db, { jwtSecret = crypto.randomBytes(32).toString("hex"), staticDir = null, panitiaCode = null } = {}) {
   const app = express();
-  app.use(cors());
   app.use(express.json());
 
   const fail = (res, code, message) => res.status(code).json({ message });

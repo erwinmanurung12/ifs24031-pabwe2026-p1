@@ -30,7 +30,7 @@ Buka http://localhost:8000. Express melayani API dan hasil build React sekaligus
 - Tanpa akun, pengunjung hanya melihat halaman sambutan.
 
 ## Akun panitia bawaan
-`admin@delliga.test` / `admin12345` (ubah lewat environment). Data contoh dibuat otomatis saat database kosong.
+`admin@delliga.test` dengan password dari `ADMIN_PASSWORD`. Kalau tidak diisi, password acak dibuat dan ditampilkan sekali di log saat akun admin pertama dibuat. Data contoh dibuat otomatis saat database kosong.
 
 ## Pengujian
 `npm test`

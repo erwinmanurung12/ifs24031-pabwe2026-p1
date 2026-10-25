@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 import bcrypt from "bcryptjs";
 import { openDb } from "./db.js";
 import { createApp } from "./app.js";
@@ -14,15 +15,17 @@ export function buildApp(env = process.env, { staticDir = null } = {}) {
   const db = openDb(dbPath);
 
   const email = env.ADMIN_EMAIL || "admin@delliga.test";
-  const password = env.ADMIN_PASSWORD || "admin12345";
   if (!db.prepare("SELECT 1 FROM users WHERE email = ?").get(email)) {
+    // Tanpa ADMIN_PASSWORD, buat password acak dan tampilkan sekali di log.
+    const password = env.ADMIN_PASSWORD || crypto.randomBytes(9).toString("base64url");
+    if (!env.ADMIN_PASSWORD) console.log(`Password admin awal (acak): ${password}`);
     db.prepare("INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, 'admin')")
       .run("Admin BEM", email, bcrypt.hashSync(password, 10));
   }
   if (env.SEED_DEMO !== "false") seedDemo(db);
 
   return createApp(db, {
-    jwtSecret: env.JWT_SECRET || "dev-secret",
+    jwtSecret: env.JWT_SECRET || undefined,
     panitiaCode: env.PANITIA_CODE || null,
     staticDir,
   });
