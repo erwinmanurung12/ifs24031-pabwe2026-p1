@@ -35,3 +35,9 @@ Buka http://localhost:8000. Express melayani API dan hasil build React sekaligus
 
 ## Pengujian
 `npm test`
+
+## Deploy di Vercel (satu proyek)
+- Root Directory: folder utama repo (bawaan). Framework Preset: Other.
+- Pengaturan build sudah ada di `vercel.json`.
+- Environment: `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `PANITIA_CODE`.
+- Catatan: di Vercel database SQLite berada di `/tmp` sehingga bersifat sementara dan dapat kembali ke data contoh saat instance baru dibuat.
