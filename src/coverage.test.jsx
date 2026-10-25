@@ -28,7 +28,7 @@ const stub = (data = {}, failing = []) => {
   return f;
 };
 const called = (f, method, suffix) => f.mock.calls.some(([u, o = {}]) => u.endsWith(suffix) && (o.method || "GET") === method);
-const errorShown = () => expect(Swal.fire).toHaveBeenCalledWith(expect.objectContaining({ icon: "error", text: "Ditolak server" }));
+const ERROR_DIALOG = expect.objectContaining({ icon: "error", text: "Ditolak server" });
 
 beforeEach(() => Swal.fire.mockClear());
 afterEach(() => vi.unstubAllGlobals());
@@ -40,7 +40,7 @@ describe("LoginPage", () => {
     await userEvent.type(screen.getByLabelText("Email"), "a@x.id");
     await userEvent.type(screen.getByLabelText("Password"), "salah-salah");
     await userEvent.click(screen.getByRole("button", { name: "Masuk" }));
-    await waitFor(errorShown);
+    await waitFor(() => expect(Swal.fire).toHaveBeenCalledWith(ERROR_DIALOG));
   });
 });
 
@@ -50,7 +50,7 @@ describe("CommentsTab", () => {
     renderWithProviders(<CommentsTab tournamentId="1" />, { state: viewer });
     await userEvent.type(await screen.findByLabelText("Tulis komentar"), "Halo");
     await userEvent.click(screen.getByRole("button", { name: "Kirim komentar" }));
-    await waitFor(errorShown);
+    await waitFor(() => expect(Swal.fire).toHaveBeenCalledWith(ERROR_DIALOG));
   });
 });
 
@@ -66,10 +66,10 @@ describe("UsersPage", () => {
     await userEvent.type(screen.getByLabelText("Email"), "c@x.id");
     await userEvent.type(screen.getByLabelText(/Password/), "password1");
     await userEvent.click(screen.getByRole("button", { name: "Buat akun" }));
-    await waitFor(errorShown);
+    await waitFor(() => expect(Swal.fire).toHaveBeenCalledWith(ERROR_DIALOG));
     Swal.fire.mockClear();
     await userEvent.click(screen.getByRole("button", { name: "Hapus" }));
-    await waitFor(errorShown);
+    await waitFor(() => expect(Swal.fire).toHaveBeenCalledWith(ERROR_DIALOG));
   });
 });
 
@@ -90,7 +90,7 @@ describe("HomePage (panitia)", () => {
     renderWithProviders(<HomePage />, { state: admin });
     await userEvent.type(await screen.findByLabelText("Nama turnamen"), "Liga Baru");
     await userEvent.click(screen.getByRole("button", { name: "Buat turnamen" }));
-    await waitFor(errorShown);
+    await waitFor(() => expect(Swal.fire).toHaveBeenCalledWith(ERROR_DIALOG));
   });
 });
 
@@ -118,7 +118,7 @@ describe("DetailPage (panitia)", () => {
   it("menampilkan pesan bila perubahan status gagal", async () => {
     open(stub(data, ["PUT /tournaments/1"]));
     await userEvent.selectOptions(await screen.findByLabelText("Status turnamen"), "finished");
-    await waitFor(errorShown);
+    await waitFor(() => expect(Swal.fire).toHaveBeenCalledWith(ERROR_DIALOG));
   });
 
   it("menampilkan pemain tanpa nomor dan menambah pemain bernomor", async () => {

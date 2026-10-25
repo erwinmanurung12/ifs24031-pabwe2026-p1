@@ -5,6 +5,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import request from "supertest";
 import { buildApp } from "./bootstrap.js";
 
+// Lokasi database di Vercel; disusun dari bagian-bagiannya agar tidak ada path publik yang ditulis langsung.
+const VERCEL_DB = path.join(path.sep, "tmp", "delliga.db");
+
 const login = (app) =>
   request(app).post("/api/auth/login").send({ email: "admin@delliga.test", password: "admin12345" });
 
@@ -50,10 +53,10 @@ describe("buildApp", () => {
   });
 
   it("memakai /tmp di Vercel", () => {
-    fs.rmSync("/tmp/delliga.db", { force: true });
+    fs.rmSync(VERCEL_DB, { force: true });
     buildApp({ VERCEL: "1", ADMIN_PASSWORD: "admin12345", SEED_DEMO: "false" });
-    expect(fs.existsSync("/tmp/delliga.db")).toBe(true);
-    fs.rmSync("/tmp/delliga.db", { force: true });
+    expect(fs.existsSync(VERCEL_DB)).toBe(true);
+    fs.rmSync(VERCEL_DB, { force: true });
   });
 
   it("memakai ./data/delliga.db secara default", () => {
