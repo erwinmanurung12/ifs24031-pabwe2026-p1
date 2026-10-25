@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 export default function StandingsTable({ rows }) {
   if (!rows.length) return <p className="py-6">Klasemen muncul setelah tim terdaftar dan pertandingan selesai.</p>;
   return (
@@ -28,3 +30,17 @@ export default function StandingsTable({ rows }) {
     </div>
   );
 }
+
+StandingsTable.propTypes = {
+  rows: PropTypes.arrayOf(PropTypes.shape({
+    rank: PropTypes.number,
+    team_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    team: PropTypes.string,
+    played: PropTypes.number,
+    won: PropTypes.number,
+    drawn: PropTypes.number,
+    lost: PropTypes.number,
+    gd: PropTypes.number,
+    points: PropTypes.number,
+  })).isRequired,
+};

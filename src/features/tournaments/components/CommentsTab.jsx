@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import useInput from "../../../hooks/useInput";
 import { formatDate, showConfirm, showError, showSuccess } from "../../../helpers/toolsHelper";
@@ -54,3 +55,7 @@ export default function CommentsTab({ tournamentId }) {
     </>
   );
 }
+
+CommentsTab.propTypes = {
+  tournamentId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+};

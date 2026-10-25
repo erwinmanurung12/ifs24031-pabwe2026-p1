@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import useInput from "../../../hooks/useInput";
@@ -41,6 +42,20 @@ function TeamBlock({ team, isAdmin, onAdd }) {
 }
 
 const TABS = [["standings", "Klasemen"], ["matches", "Jadwal dan hasil"], ["teams", "Tim"], ["comments", "Komentar"]];
+
+TeamBlock.propTypes = {
+  team: PropTypes.shape({
+    name: PropTypes.string,
+    manager: PropTypes.string,
+    players: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      number: PropTypes.number,
+      name: PropTypes.string,
+    })),
+  }).isRequired,
+  isAdmin: PropTypes.bool,
+  onAdd: PropTypes.func.isRequired,
+};
 
 export default function DetailPage() {
   const { id } = useParams();

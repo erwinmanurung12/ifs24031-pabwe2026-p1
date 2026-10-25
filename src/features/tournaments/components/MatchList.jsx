@@ -1,5 +1,15 @@
 import { formatDate } from "../../../helpers/toolsHelper";
+import PropTypes from "prop-types";
 import useInput from "../../../hooks/useInput";
+
+const matchShape = PropTypes.shape({
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  home_team: PropTypes.string,
+  away_team: PropTypes.string,
+  home_score: PropTypes.number,
+  away_score: PropTypes.number,
+  status: PropTypes.string,
+});
 
 function ScoreForm({ match, onSave, onDelete }) {
   const [home, onHome] = useInput(match.home_score ?? "");
@@ -21,6 +31,12 @@ function ScoreForm({ match, onSave, onDelete }) {
   );
 }
 
+ScoreForm.propTypes = {
+  match: matchShape.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+};
+
 export default function MatchList({ matches, isAdmin, onSave, onDelete }) {
   if (!matches.length) return <p className="py-6">Belum ada pertandingan dijadwalkan.</p>;
   return (
@@ -39,3 +55,10 @@ export default function MatchList({ matches, isAdmin, onSave, onDelete }) {
     </ul>
   );
 }
+
+MatchList.propTypes = {
+  matches: PropTypes.arrayOf(matchShape).isRequired,
+  isAdmin: PropTypes.bool,
+  onSave: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+};

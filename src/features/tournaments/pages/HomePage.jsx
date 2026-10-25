@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import useInput from "../../../hooks/useInput";
@@ -65,6 +66,17 @@ function Hero({ next, count }) {
     </section>
   );
 }
+
+Hero.propTypes = {
+  next: PropTypes.shape({
+    tournament_id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    home_team: PropTypes.string,
+    away_team: PropTypes.string,
+    scheduled_at: PropTypes.string,
+    tournament: PropTypes.string,
+  }),
+  count: PropTypes.number,
+};
 
 export default function HomePage() {
   const dispatch = useDispatch();
