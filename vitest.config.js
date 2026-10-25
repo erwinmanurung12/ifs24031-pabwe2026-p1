@@ -2,25 +2,25 @@ import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 
 // Konfigurasi uji untuk root repo (dipakai Jenkins: `npx vitest run --coverage`).
-// Menjalankan uji frontend (jsdom) dan backend (node) sekaligus.
+// Frontend diuji di jsdom, backend (src/backend) di node.
 export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
-    environment: "node",
-    environmentMatchGlobs: [["frontend/**", "jsdom"]],
-    include: ["frontend/src/**/*.test.{js,jsx}", "backend/tests/**/*.test.js"],
-    setupFiles: ["./frontend/src/setupTests.js"],
+    environment: "jsdom",
+    environmentMatchGlobs: [["src/backend/**", "node"]],
+    include: ["src/**/*.test.{js,jsx}"],
+    setupFiles: ["./src/setupTests.js"],
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov"],
       reportsDirectory: "./coverage",
-      include: ["frontend/src/**", "backend/src/**"],
+      include: ["src/**"],
       exclude: [
-        "frontend/src/main.jsx",
-        "frontend/src/setupTests.js",
-        "frontend/src/test-utils.jsx",
-        "backend/src/server.js",
+        "src/main.jsx",
+        "src/setupTests.js",
+        "src/test-utils.jsx",
+        "src/backend/server.js",
         "**/*.test.*",
       ],
     },

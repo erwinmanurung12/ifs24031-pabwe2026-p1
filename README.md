@@ -2,26 +2,25 @@
 
 Sistem manajemen turnamen olahraga kampus (Proyek 1 PABWE).
 Membutuhkan Node.js 22.13 atau lebih baru (SQLite memakai modul bawaan `node:sqlite`, tanpa kompilasi).
-Satu repository dengan dua folder: `backend/` (Express.js + SQLite) dan `frontend/` (ReactJS + Vite).
+Satu repository: seluruh kode ada di `src/` — frontend ReactJS + Vite di `src/`, backend Express.js + SQLite di `src/backend/`.
 
 ## Pengembangan lokal
 ```
 npm install
-npm run install:all
 npm run dev
 ```
 Buka http://localhost:3000 (backend di port 8000, `/api` diteruskan otomatis).
 
 ## Satu server, satu URL (produksi)
 ```
-npm run install:all
+npm install
 npm run build
 npm start
 ```
 Buka http://localhost:8000. Express melayani API dan hasil build React sekaligus.
 
 ## Deploy (Render, satu layanan)
-- Build Command: `npm run install:all && npm run build`
+- Build Command: `npm install && npm run build`
 - Start Command: `npm start`
 - Environment: `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `PANITIA_CODE`, `NODE_VERSION=22`
 
