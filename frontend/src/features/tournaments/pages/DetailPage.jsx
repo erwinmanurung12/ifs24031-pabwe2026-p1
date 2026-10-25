@@ -15,7 +15,7 @@ function TeamBlock({ team, isAdmin, onAdd }) {
   return (
     <section className="border border-line bg-white p-4">
       <h3 className="font-display text-2xl font-bold text-pitch">{team.name}</h3>
-      {team.manager && <p className="text-sm text-ink/60 mb-2">Manajer: {team.manager}</p>}
+      {team.manager && <p className="text-sm text-ink/70 mb-2">Manajer: {team.manager}</p>}
       {players.length ? (
         <ol className="divide-y divide-line text-sm">
           {players.map((p) => (
@@ -101,7 +101,7 @@ export default function DetailPage() {
       <div role="tablist" className="flex gap-6 border-b border-line mb-6">
         {TABS.map(([key, label]) => (
           <button key={key} role="tab" aria-selected={tab === key} onClick={() => setTab(key)}
-            className={`pb-2 font-semibold border-b-4 ${tab === key ? "border-bib" : "border-transparent text-ink/60"}`}>
+            className={`pb-2 font-semibold border-b-4 ${tab === key ? "border-bib" : "border-transparent text-ink/70"}`}>
             {label}
           </button>
         ))}

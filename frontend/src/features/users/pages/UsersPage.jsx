@@ -55,7 +55,7 @@ export default function UsersPage() {
       <ul className="divide-y divide-line border-y border-line">
         {list.map((u) => (
           <li key={u.id} className="flex items-center justify-between py-3">
-            <span><span className="font-display text-xl font-semibold">{u.name}</span> <span className="text-sm text-ink/60">{u.email}</span></span>
+            <span><span className="font-display text-xl font-semibold">{u.name}</span> <span className="text-sm text-ink/70">{u.email}</span></span>
             {u.id !== me.id && (
               <button onClick={async () => { if (await showConfirm(`Hapus akun ${u.name}?`)) run(deleteUser(u.id), "Akun dihapus"); }}
                 className="text-sm text-redcard underline">Hapus</button>

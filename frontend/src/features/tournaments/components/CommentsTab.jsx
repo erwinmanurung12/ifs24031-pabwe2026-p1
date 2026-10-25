@@ -40,7 +40,7 @@ export default function CommentsTab({ tournamentId }) {
               <p className="text-sm">
                 <span className="font-display text-lg font-semibold">{c.author}</span>
                 {c.author_role === "admin" && <span className="ml-2 bg-bib px-2 text-xs font-semibold">Panitia</span>}
-                <span className="ml-2 text-ink/60">{formatDate(c.created_at)}</span>
+                <span className="ml-2 text-ink/70">{formatDate(c.created_at)}</span>
               </p>
               <p>{c.body}</p>
               {(me?.role === "admin" || me?.id === c.user_id) && (

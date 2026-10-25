@@ -39,7 +39,7 @@ export default function RegisterPage() {
       {role === "admin" && (
         <label className="grid gap-1 text-sm font-medium">Kode panitia
           <input required value={code} onChange={onCode} className="border border-line px-3 py-2 font-normal" />
-          <span className="text-xs font-normal text-ink/60">Kode diberikan oleh ketua panitia.</span>
+          <span className="text-xs font-normal text-ink/70">Kode diberikan oleh ketua panitia.</span>
         </label>
       )}
       <label className="grid gap-1 text-sm font-medium">Nama

@@ -8,6 +8,12 @@
   ],
   "headers": [
     {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "all" }
+      ]
+    },
+    {
       "source": "/((?!assets/|api/).*)",
       "headers": [
         { "key": "Cache-Control", "value": "no-store, max-age=0" }

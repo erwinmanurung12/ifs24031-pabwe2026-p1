@@ -90,7 +90,7 @@ export default function HomePage() {
                   <span className="font-display text-xl font-semibold text-right">{m.home_team}</span>
                   <span className="bg-pitch text-white font-display text-2xl font-bold px-3 py-1">{m.home_score} - {m.away_score}</span>
                   <span className="font-display text-xl font-semibold">{m.away_team}</span>
-                  <span className="col-span-3 text-center text-xs text-ink/60">{m.tournament}</span>
+                  <span className="col-span-3 text-center text-xs text-ink/70">{m.tournament}</span>
                 </Link>
               </li>
             ))}
@@ -112,7 +112,7 @@ export default function HomePage() {
                   </span>
                 </span>
                 {t.leader && (
-                  <span className="text-sm"><span className="text-ink/60">Pemuncak </span>
+                  <span className="text-sm"><span className="text-ink/70">Pemuncak </span>
                     <span className="font-display text-xl font-bold text-pitch">{t.leader.team}</span> ({t.leader.points} poin)
                   </span>
                 )}
